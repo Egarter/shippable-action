@@ -1,0 +1,29 @@
+name: Shippable scan
+description: Check your AI-built app for security leaks (open Supabase or Firebase data, secret keys in the browser, unsafe edge functions) on every pull request. Read-only, free.
+author: Shippable
+branding:
+  icon: shield
+  color: yellow
+inputs:
+  url:
+    description: Dev server to scan, for example localhost:3000. A live URL works too, once you own it (see the README).
+    default: localhost:3000
+  start:
+    description: Command that starts your dev server in the background, for example "npm run dev". Leave empty if your workflow already started it.
+    default: ""
+  working-directory:
+    description: Project folder (where package.json is). Its code is checked too.
+    default: "."
+  version:
+    description: shippable-dev version to run.
+    default: latest
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: ${{ github.action_path }}/run.sh
+      env:
+        SHIPPABLE_URL: ${{ inputs.url }}
+        SHIPPABLE_START: ${{ inputs.start }}
+        SHIPPABLE_DIR: ${{ inputs.working-directory }}
+        SHIPPABLE_VERSION: ${{ inputs.version }}
